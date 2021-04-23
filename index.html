@@ -27,14 +27,23 @@
     window.onload = () => {
       // フォームの要素を取得
       const formElement = document.getElementById("members-form");
-      // メンバーの数だけinputタグを増やす
+      // メンバーの数だけ以下の処理
       members.forEach((member, i) => {
+        // メンバー名入力フォーム
         const inputElement = document.createElement("input");
         inputElement.value = member;
         // idを付与して後で編集しやすくする
-        inputElement.id = i;
+        inputElement.id = "input-" + i;
         inputElement.addEventListener("change", onChangeHandler);
         formElement.appendChild(inputElement);
+
+        // メンバーの削除ボタン
+        const buttonElement = document.createElement("button");
+        buttonElement.innerText = "削除";
+        buttonElement.id = "button-" + i;
+        buttonElement.type = "button";
+        buttonElement.addEventListener("click", onClickHandler);
+        formElement.appendChild(buttonElement);
       });
     };
 
@@ -43,7 +52,19 @@
       const member = event.target.value;
       // eventが呼ばれたinputタグのidを検索して要素を上書きする
       const elemId = event.target.id;
-      members[elemId] = member;
+      const idx = elemId.replace("input-", "");
+      members[idx] = member;
+    };
+
+    // 削除ボタンが押されたときに呼ばれる関数
+    const onClickHandler = (event) => {
+      console.log("onClickHandler");
+      const elemId = event.target.id;
+      // elemId番目の要素を1つ削除する
+      const idx = elemId.replace("button-", "");
+      members.splice(idx, 1);
+      // 削除ボタンを消す
+      event.target.remove();
     };
 
     // 結果を見るボタンが押されたときに呼ばれる関数
