@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="resultHandler()" id="view-result">結果を見る</button>
+    <ol id="result"></ol>
+  </body>
+  <script>
+    const resultHandler = () => {
+      const resultBox = document.getElementById("result");
+      refreshResultBox(resultBox);
+      const shuffledMember = shuffle([
+        "Katsuya Suzuki",
+        "Ishibashi Ryo",
+        "mei",
+        "Kaihotsu Kotaro",
+        "ryogo_niwa",
+        "nanaka",
+      ]);
+      setResult(resultBox, shuffledMember);
+    };
+
+    const setResult = (resultBoxElement, shuffledMembers) => {
+      shuffledMembers.forEach((member) => {
+        const listElement = document.createElement("li");
+        listElement.innerText = member;
+        resultBoxElement.appendChild(listElement);
+      });
+    };
+
+    const shuffle = (elements) => {
+      console.log("mem : ", elements);
+      const shuffledElements = [];
+      while (elements.length > 0) {
+        var num = elements.length;
+        var k = Math.floor(Math.random() * num);
+        shuffledElements.push(elements[k]);
+        elements.splice(k, 1);
+      }
+      return shuffledElements;
+    };
+
+    const refreshResultBox = (resultBoxElement) => {
+      resultBoxElement.innerHTML = "";
+    };
+  </script>
+</html>
