@@ -8,24 +8,57 @@
   </head>
   <body>
     <button onclick="resultHandler()" id="view-result">結果を見る</button>
+    <form id="members-form">
+    </form>
     <ol id="result"></ol>
   </body>
+
   <script>
+    // 初期のメンバーリスト
+    const members = [
+      "Katsuya Suzuki",
+      "Ishibashi Ryo",
+      "mei",
+      "Kaihotsu Kotaro",
+      "ryogo_niwa",
+      "nanaka",
+    ];
+
+    window.onload = () => {
+      // フォームの要素を取得
+      const formElement = document.getElementById("members-form");
+      // メンバーの数だけinputタグを増やす
+      members.forEach((member, i) => {
+        const inputElement = document.createElement("input");
+        inputElement.value = member;
+        // idを付与して後で編集しやすくする
+        inputElement.id = i;
+        inputElement.addEventListener("change", onChangeHandler);
+        formElement.appendChild(inputElement);
+      });
+    };
+
+    // 入力されたときに呼ばれる関数
+    const onChangeHandler = (event) => {
+      const member = event.target.value;
+      // eventが呼ばれたinputタグのidを検索して要素を上書きする
+      const elemId = event.target.id;
+      members[elemId] = member;
+    };
+
+    // 結果を見るボタンが押されたときに呼ばれる関数
     const resultHandler = () => {
       const resultBox = document.getElementById("result");
+      // 結果を空にする
       refreshResultBox(resultBox);
-      const shuffledMember = shuffle([
-        "Katsuya Suzuki",
-        "Ishibashi Ryo",
-        "mei",
-        "Kaihotsu Kotaro",
-        "ryogo_niwa",
-        "nanaka",
-      ]);
+      // メンバーをランダムに入れ替える
+      const shuffledMember = shuffle(members);
+      // 結果に代入する
       setResult(resultBox, shuffledMember);
     };
 
     const setResult = (resultBoxElement, shuffledMembers) => {
+      // メンバーの名前をli要素に入れる
       shuffledMembers.forEach((member) => {
         const listElement = document.createElement("li");
         listElement.innerText = member;
@@ -33,18 +66,26 @@
       });
     };
 
+    // メンバーをランダムに入れ替える
     const shuffle = (elements) => {
+      // メンバーをコピーする
+      const copiedElements = [];
+      elements.forEach((elem) => {
+        copiedElements.push(elem);
+      });
       console.log("mem : ", elements);
       const shuffledElements = [];
-      while (elements.length > 0) {
-        var num = elements.length;
+      // ランダムに取り出して代入していく
+      while (copiedElements.length > 0) {
+        var num = copiedElements.length;
         var k = Math.floor(Math.random() * num);
-        shuffledElements.push(elements[k]);
-        elements.splice(k, 1);
+        shuffledElements.push(copiedElements[k]);
+        copiedElements.splice(k, 1);
       }
       return shuffledElements;
     };
 
+    // 結果を空にする
     const refreshResultBox = (resultBoxElement) => {
       resultBoxElement.innerHTML = "";
     };
