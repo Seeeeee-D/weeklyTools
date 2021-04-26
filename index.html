@@ -7,15 +7,18 @@
     <title>Document</title>
   </head>
   <body>
+    <form id="members-form"></form>
+    <hr />
+    <input id="new-member" />
+    <button type="button" onclick="addMember()">追加</button>
+    <hr />
     <button onclick="resultHandler()" id="view-result">結果を見る</button>
-    <form id="members-form">
-    </form>
     <ol id="result"></ol>
   </body>
 
   <script>
     // 初期のメンバーリスト
-    const members = [
+    let members = [
       "Katsuya Suzuki",
       "Ishibashi Ryo",
       "mei",
@@ -25,8 +28,13 @@
     ];
 
     window.onload = () => {
+      setNamesInput();
+    };
+
+    const setNamesInput = () => {
       // フォームの要素を取得
       const formElement = document.getElementById("members-form");
+      formElement.innerHTML = "";
       // メンバーの数だけ以下の処理
       members.forEach((member, i) => {
         const inputGroup = document.createElement("div");
@@ -61,13 +69,13 @@
 
     // 削除ボタンが押されたときに呼ばれる関数
     const deleteButtonHandler = (event) => {
-      console.log("onClickHandler");
       const elemId = event.target.id;
       // elemId番目の要素を1つ削除する
       const idx = elemId.replace("button-", "");
-      members.splice(idx, 1);
-      // 削除ボタンを消す
-      document.getElementById(idx).remove()
+      const inputDivGroup = document.getElementById(idx);
+      const value = document.getElementById(`input-${idx}`).value;
+      members = members.filter((m) => m != value);
+      document.getElementById(idx).remove();
     };
 
     // 結果を見るボタンが押されたときに呼ばれる関数
@@ -97,7 +105,6 @@
       elements.forEach((elem) => {
         copiedElements.push(elem);
       });
-      console.log("mem : ", elements);
       const shuffledElements = [];
       // ランダムに取り出して代入していく
       while (copiedElements.length > 0) {
@@ -112,6 +119,14 @@
     // 結果を空にする
     const refreshResultBox = (resultBoxElement) => {
       resultBoxElement.innerHTML = "";
+    };
+
+    const addMember = () => {
+      const newMember = document.getElementById("new-member").value;
+      document.getElementById("new-member").value = "";
+      members.push(newMember);
+      setNamesInput();
+      resultHandler();
     };
   </script>
 </html>
