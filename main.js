@@ -110,52 +110,23 @@ const addMember = () => {
   resultHandler();
 };
 
-class Timer {
-  //private変数
-  #minuteInput;
-  #secondInput;
-  #defaultMinute;
-  #defaultSecond;
-  #remainSecond;
-
-  constructor(minuteInput, secondInput) {
-    this.#minuteInput = minuteInput;
-    this.#secondInput = secondInput;
-    this.#defaultMinute = parseInt(minuteInput.value);
-    this.#defaultSecond = parseInt(secondInput.value);
-    this.#remainSecond = this.#defaultMinute * 60 + this.#defaultSecond;
-  }
-
-  startTimer(interval = 1000) {
-    // this.intervalID = setInterval(this.handlerTimer, interval); //これだとhandlerTimer側でthisがwindowを参照するようになる
-    this.intervalID = setInterval(() => {
-      this.#handlerTimer();
-    }, interval);
-  }
-
-  #rewriteTimerElements() {
-    this.#minuteInput.value = Math.floor(parseFloat(this.#remainSecond / 60));
-    this.#secondInput.value = this.#remainSecond % 60;
-  }
-
-  #handlerTimer() {
-    this.#remainSecond -= 1;
-    this.#rewriteTimerElements();
-    if (this.#remainSecond <= 0) {
-      clearInterval(this.intervalID);
-      // 待たないとrewriteより先にalertが実行されてしまう。
-      setTimeout(() => {
-        alert("時間だよ〜");
-      }, 10);
-      this.#minuteInput.value = this.#defaultMinute;
-      this.#secondInput.value = this.#defaultSecond;
-    }
-  }
-}
-
-const timerStart = () => {
+const timerStart = async () => {
   const minuteInput = document.getElementById("min");
   const secondInput = document.getElementById("sec");
-  const timer = new Timer(minuteInput, secondInput);
+  let timer;
+  if (
+    window.navigator.userAgent.toLocaleLowerCase().includes("firefox") ||
+    window.navigator.userAgent.toLocaleLowerCase().includes("msie")
+  ) {
+    // ネストされた場所で通常のimportはできない
+    // import UnsafeTimer from "./unSafeTimer.js"
+    const UnsafeTimer = await import("./unSafeTimer.js").then(
+      (module) => module.default
+    );
+    timer = new UnsafeTimer(minuteInput, secondInput);
+  } else {
+    const Timer = await import("./Timer.js").then((module) => module.default);
+    timer = new Timer(minuteInput, secondInput);
+  }
   timer.startTimer(1000);
 };
