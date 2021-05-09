@@ -128,5 +128,9 @@ const timerStart = async () => {
     const Timer = await import("./Timer.js").then((module) => module.default);
     timer = new Timer(minuteInput, secondInput);
   }
-  timer.startTimer(1000);
+  if (timer.isTimerValid()) {
+    timer.startTimer(1000);
+  } else {
+    window.alert("時間にミスあるよ");
+  }
 };

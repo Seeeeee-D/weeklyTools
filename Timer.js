@@ -14,6 +14,10 @@ export default class Timer {
     this.#remainSecond = this.#defaultMinute * 60 + this.#defaultSecond;
   }
 
+  isTimerValid(){
+    return this.#remainSecond > 0;
+  }
+
   startTimer(interval = 1000) {
     // this.intervalID = setInterval(this.handlerTimer, interval); //これだとhandlerTimer側でthisがwindowを参照するようになる
     this.intervalID = setInterval(() => {
@@ -28,6 +32,7 @@ export default class Timer {
 
   #handlerTimer() {
     this.#remainSecond -= 1;
+    console.log(this.#remainSecond)
     this.#rewriteTimerElements();
     if (this.#remainSecond <= 0) {
       clearInterval(this.intervalID);
@@ -39,4 +44,4 @@ export default class Timer {
       this.#secondInput.value = this.#defaultSecond;
     }
   }
-};
+}

@@ -6,6 +6,9 @@ export default class UnsafeTimer {
     this.defaultSecond = parseInt(secondInput.value);
     this.remainSecond = this.defaultMinute * 60 + this.defaultSecond;
   }
+  isTimerValid(){
+    return this.remainSecond > 0;
+  }
 
   startTimer(interval = 1000) {
     // this.intervalID = setInterval(this.handlerTimer, interval); //これだとhandlerTimer側でthisがwindowを参照するようになる
