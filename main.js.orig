@@ -116,7 +116,11 @@ const doAfterTimeout = ([isTimeOut = true]) => {
     // 待たないとrewriteより先にalertが実行されてしまう。
     setTimeout(() => {
       alert("時間だよ〜");
+<<<<<<< HEAD
       timer.restoreDefaultTime();
+=======
+      timer.restoreDefultTime();
+>>>>>>> 8d35b2ff4d5e6c000b8fbab91d13a7f39326c90f
     }, 10);
   }
   document.getElementById("start-button").disabled = false;
@@ -150,6 +154,10 @@ const timerStart = async () => {
 const timerReset = () => {
   timer.stopTimer(false);
   window.alert("タイマーを止めたよ");
+<<<<<<< HEAD
   timer.restoreDefaultTime();
+=======
+  timer.restoreDefultTime();
+>>>>>>> 8d35b2ff4d5e6c000b8fbab91d13a7f39326c90f
   timer = undefined;
 };

@@ -33,7 +33,11 @@ export default class Timer {
     this.secondInput.value = this.remainSecond % 60;
   }
 
+<<<<<<< HEAD
   restoreDefaultTime(){
+=======
+  restoreDefultTime(){
+>>>>>>> 8d35b2ff4d5e6c000b8fbab91d13a7f39326c90f
     this.minuteInput.value = this.defaultMinute;
     this.secondInput.value = this.defaultSecond;
   }
