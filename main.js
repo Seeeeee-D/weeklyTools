@@ -114,9 +114,7 @@ let timer;
 const doAfterTimeout = ([isTimeOut = true]) => {
   if (isTimeOut) {
     // 待たないとrewriteより先にalertが実行されてしまう。
-    setTimeout(() => {
-      alert("時間だよ〜");
-    }, 10);
+    confirm("時間だよ〜");
   }
   document.getElementById("start-button").disabled = false;
   document.getElementById("reset-button").disabled = true;

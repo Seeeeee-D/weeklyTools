@@ -23,8 +23,12 @@ export default class Timer {
 
   stopTimer(...callbackVals) {
     clearInterval(this.intervalID);
-    this.doAfterTimeout(callbackVals);
-    this.restoreDefaultTime();
+    this.minuteInput.value = 0;
+    this.secondInput.value = 0;
+    setTimeout(()=>{
+      this.doAfterTimeout(callbackVals);
+      this.restoreDefaultTime();
+    }, 100)
   }
 
   rewriteTimerElements() {
@@ -40,7 +44,7 @@ export default class Timer {
   handlerTimer() {
     this.remainSecond -= 1;
     this.rewriteTimerElements();
-    if (this.remainSecond < 0) {
+    if (this.remainSecond <= 0) {
       this.stopTimer();
     }
   }
