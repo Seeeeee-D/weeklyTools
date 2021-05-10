@@ -36,7 +36,7 @@ export default class Timer {
   handlerTimer() {
     this.remainSecond -= 1;
     this.rewriteTimerElements();
-    if (this.remainSecond <= 0) {
+    if (this.remainSecond < 0) {
       this.stopTimer();
     }
   }
