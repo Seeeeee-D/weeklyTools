@@ -53,7 +53,6 @@ const deleteButtonHandler = (event) => {
   const elemId = event.target.id;
   // elemId番目の要素を1つ削除する
   const idx = elemId.replace("button-", "");
-  const inputDivGroup = document.getElementById(idx);
   const value = document.getElementById(`input-${idx}`).value;
   members = members.filter((m) => m != value);
   document.getElementById(idx).remove();
@@ -112,7 +111,7 @@ const addMember = () => {
 
 let timer;
 
-const doAfterTimeout = ([isTimeOut]) => {
+const doAfterTimeout = ([isTimeOut = true]) => {
   if (isTimeOut) {
     // 待たないとrewriteより先にalertが実行されてしまう。
     setTimeout(() => {
@@ -129,7 +128,6 @@ const doBeforeTimerStart = () => {
 };
 
 const timerStart = async () => {
-  if (!!timer) return;
   const minuteInput = document.getElementById("min");
   const secondInput = document.getElementById("sec");
 

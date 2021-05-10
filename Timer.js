@@ -13,8 +13,8 @@ export default class Timer {
     return this.remainSecond > 0;
   }
 
-  startTimer(interval = 1000) {
-    this.doBeforeTimerStart();
+  startTimer(interval = 1000, ...callbackVals) {
+    this.doBeforeTimerStart(callbackVals);
     // this.intervalID = setInterval(this.handlerTimer, interval); //これだとhandlerTimer側でthisがwindowを参照するようになる
     this.intervalID = setInterval(() => {
       this.handlerTimer();
