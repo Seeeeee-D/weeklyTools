@@ -110,27 +110,46 @@ const addMember = () => {
   resultHandler();
 };
 
+let timer;
+
+const doAfterTimeout = ([isTimeOut]) => {
+  if (isTimeOut) {
+    // 待たないとrewriteより先にalertが実行されてしまう。
+    setTimeout(() => {
+      alert("時間だよ〜");
+    }, 10);
+  }
+  document.getElementById("start-button").disabled = false;
+  document.getElementById("reset-button").disabled = true;
+};
+
+const doBeforeTimerStart = () => {
+  document.getElementById("start-button").disabled = true;
+  document.getElementById("reset-button").disabled = false;
+};
+
 const timerStart = async () => {
+  if (!!timer) return;
   const minuteInput = document.getElementById("min");
   const secondInput = document.getElementById("sec");
-  let timer;
-  if (
-    window.navigator.userAgent.toLocaleLowerCase().includes("firefox") ||
-    window.navigator.userAgent.toLocaleLowerCase().includes("msie")
-  ) {
-    // ネストされた場所で通常のimportはできない
-    // import UnsafeTimer from "./unSafeTimer.js"
-    const UnsafeTimer = await import("./unSafeTimer.js").then(
-      (module) => module.default
-    );
-    timer = new UnsafeTimer(minuteInput, secondInput);
-  } else {
-    const Timer = await import("./Timer.js").then((module) => module.default);
-    timer = new Timer(minuteInput, secondInput);
-  }
+
+  const Timer = await import("./Timer.js").then((module) => module.default);
+  timer = new Timer(
+    minuteInput,
+    secondInput,
+    doBeforeTimerStart,
+    doAfterTimeout
+  );
+
   if (timer.isTimerValid()) {
     timer.startTimer(1000);
   } else {
     window.alert("時間にミスあるよ");
   }
+};
+
+const timerReset = () => {
+  timer.stopTimer(false);
+  window.alert("タイマーを止めたよ");
+  timer = undefined;
 };

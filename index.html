@@ -20,7 +20,8 @@
       <label for="min">分</label>
       <input type="number" id="sec" value="0" min="1"/>
       <label for="sec">秒</label>
-      <button type="button" onclick="timerStart()">Start</button>
+      <button id="start-button" type="button" onclick="timerStart()">Start</button>
+      <button id="reset-button" type="button" onclick="timerReset()" disabled>Reset</button>
     </form>
     <script src="main.js"></script>
   </body>
