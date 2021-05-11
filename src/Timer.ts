@@ -1,7 +1,7 @@
 export default class Timer {
-  defaultMinute: number;
-  defaultSecond: number;
-  remainSecond: number;
+  private defaultMinute: number;
+  private defaultSecond: number;
+  private remainSecond: number;
   static intervalObj: NodeJS.Timeout;
 
   constructor(
@@ -15,11 +15,15 @@ export default class Timer {
     this.remainSecond = this.defaultMinute * 60 + this.defaultSecond;
   }
 
-  isTimerValid(): boolean {
+  private isTimerValid(): boolean {
     return this.remainSecond > 0;
   }
 
   startTimer(interval = 1000, ...callbackVals: any[]) {
+    if (!this.isTimerValid()) {
+      window.alert("時間にミスあるよ");
+      return;
+    }
     this.doBeforeTimerStart(callbackVals);
     Timer.intervalObj = setInterval(() => {
       this.handlerTimer();
@@ -36,17 +40,17 @@ export default class Timer {
     }, 100);
   }
 
-  rewriteTimerElements() {
+  private rewriteTimerElements() {
     this.minuteInput.value = Math.floor(this.remainSecond / 60).toString();
     this.secondInput.value = (this.remainSecond % 60).toString();
   }
 
-  restoreDefaultTime() {
+  private restoreDefaultTime() {
     this.minuteInput.value = this.defaultMinute.toString();
     this.secondInput.value = this.defaultSecond.toString();
   }
 
-  handlerTimer() {
+  private handlerTimer() {
     this.remainSecond -= 1;
     this.rewriteTimerElements();
     if (this.remainSecond <= 0) {

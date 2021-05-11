@@ -1,14 +1,5 @@
 import Timer from "./Timer";
 
-declare global {
-  // Windowオブジェクトを拡張
-  interface Window {
-    addMember: () => any;
-    resultHandler: () => any;
-    timerStart: () => any;
-    timerReset: () => any;
-  }
-}
 // 初期のメンバーリスト
 let members = [
   "Katsuya Suzuki",
@@ -157,11 +148,7 @@ const timerStart = async () => {
     doAfterTimeout
   );
 
-  if (timer.isTimerValid()) {
-    timer.startTimer(1000);
-  } else {
-    window.alert("時間にミスあるよ");
-  }
+  timer.startTimer(1000);
 };
 
 const timerReset = () => {
@@ -175,7 +162,17 @@ window.onload = () => {
   setNamesInput();
 };
 
-// HTMLからonClickで呼び出すためにwindowオブジェクトのプロパティにする必要がある
+declare global {
+  // HTMLからonClickで呼び出すためにwindowオブジェクトのプロパティにする必要がある
+  // Windowオブジェクトにもともと下記プロパティはないので型を拡張する
+  interface Window {
+    addMember: () => any;
+    resultHandler: () => any;
+    timerStart: () => any;
+    timerReset: () => any;
+  }
+}
+// 定義したプロパティに関数をセット
 window.addMember = addMember;
 window.resultHandler = resultHandler;
 window.timerStart = timerStart;

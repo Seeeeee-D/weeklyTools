@@ -5,7 +5,7 @@ module.exports = {
   //FIXME: mode
   //FIXME: Linter
   //FIXME: Formatter
-  entry: "./src/main.js",
+  entry: "./src/main.ts",
   devServer: {
     contentBase: "./docs",
   },
