@@ -1,4 +1,4 @@
-import Timer from "./Timer.ts";
+import Timer from "./Timer";
 // 初期のメンバーリスト
 let members = [
   "Katsuya Suzuki",
