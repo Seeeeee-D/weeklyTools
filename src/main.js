@@ -1,3 +1,4 @@
+import Timer from "./Timer.ts";
 // 初期のメンバーリスト
 let members = [
   "Katsuya Suzuki",
@@ -7,7 +8,6 @@ let members = [
   "ryogo_niwa",
   "nanaka",
 ];
-
 
 const setNamesInput = () => {
   // フォームの要素を取得
@@ -126,7 +126,6 @@ const timerStart = async () => {
   const minuteInput = document.getElementById("min");
   const secondInput = document.getElementById("sec");
 
-  const Timer = await import("./Timer.js").then((module) => module.default);
   timer = new Timer(
     minuteInput,
     secondInput,
