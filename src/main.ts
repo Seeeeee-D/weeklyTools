@@ -1,4 +1,14 @@
 import Timer from "./Timer";
+
+declare global {
+  // Windowオブジェクトを拡張
+  interface Window {
+    addMember: () => any;
+    resultHandler: () => any;
+    timerStart: () => any;
+    timerReset: () => any;
+  }
+}
 // 初期のメンバーリスト
 let members = [
   "Katsuya Suzuki",
@@ -12,11 +22,12 @@ let members = [
 const setNamesInput = () => {
   // フォームの要素を取得
   const formElement = document.getElementById("members-form");
+  if (!formElement) return;
   formElement.innerHTML = "";
   // メンバーの数だけ以下の処理
   members.forEach((member, i) => {
     const inputGroup = document.createElement("div");
-    inputGroup.id = i;
+    inputGroup.id = i.toString();
     formElement.appendChild(inputGroup);
     // メンバー名入力フォーム
     const inputElement = document.createElement("input");
@@ -37,27 +48,32 @@ const setNamesInput = () => {
 };
 
 // 入力されたときに呼ばれる関数
-const onChangeHandler = (event) => {
-  const member = event.target.value;
+const onChangeHandler = (event: Event) => {
+  const { target } = event;
+  if (!(target instanceof HTMLInputElement)) return;
+  const member = target.value;
   // eventが呼ばれたinputタグのidを検索して要素を上書きする
-  const elemId = event.target.id;
-  const idx = elemId.replace("input-", "");
+  const elemId = target.id;
+  const idx = Number(elemId.replace("input-", ""));
   members[idx] = member;
 };
 
 // 削除ボタンが押されたときに呼ばれる関数
-const deleteButtonHandler = (event) => {
+const deleteButtonHandler = (event: Event) => {
+  const { target } = event;
+  if (!(event.target instanceof HTMLButtonElement)) return;
   const elemId = event.target.id;
   // elemId番目の要素を1つ削除する
   const idx = elemId.replace("button-", "");
-  const value = document.getElementById(`input-${idx}`).value;
+  const inputElm = document?.getElementById(`input-${idx}`) as HTMLInputElement;
+  const value = inputElm.value;
   members = members.filter((m) => m != value);
-  document.getElementById(idx).remove();
+  document?.getElementById(idx)?.remove();
 };
 
 // 結果を見るボタンが押されたときに呼ばれる関数
 const resultHandler = () => {
-  const resultBox = document.getElementById("result");
+  const resultBox = document.getElementById("result") as HTMLElement;
   // 結果を空にする
   refreshResultBox(resultBox);
   // メンバーをランダムに入れ替える
@@ -66,7 +82,10 @@ const resultHandler = () => {
   setResult(resultBox, shuffledMember);
 };
 
-const setResult = (resultBoxElement, shuffledMembers) => {
+const setResult = (
+  resultBoxElement: HTMLElement,
+  shuffledMembers: string[]
+) => {
   // メンバーの名前をli要素に入れる
   shuffledMembers.forEach((member) => {
     const listElement = document.createElement("li");
@@ -76,13 +95,13 @@ const setResult = (resultBoxElement, shuffledMembers) => {
 };
 
 // メンバーをランダムに入れ替える
-const shuffle = (elements) => {
+const shuffle = <T>(elements: T[]): T[] => {
   // メンバーをコピーする
-  const copiedElements = [];
+  const copiedElements: T[] = [];
   elements.forEach((elem) => {
     copiedElements.push(elem);
   });
-  const shuffledElements = [];
+  const shuffledElements: T[] = [];
   // ランダムに取り出して代入していく
   while (copiedElements.length > 0) {
     var num = copiedElements.length;
@@ -94,37 +113,42 @@ const shuffle = (elements) => {
 };
 
 // 結果を空にする
-const refreshResultBox = (resultBoxElement) => {
+const refreshResultBox = (resultBoxElement: HTMLElement) => {
   resultBoxElement.innerHTML = "";
 };
 
 const addMember = () => {
-  const newMember = document.getElementById("new-member").value;
-  document.getElementById("new-member").value = "";
+  const inputElm = document.getElementById("new-member") as HTMLInputElement;
+  const newMember = inputElm.value;
+  inputElm.value = "";
   members.push(newMember);
   setNamesInput();
   resultHandler();
 };
 
-let timer;
+let timer: Timer | undefined;
 
-const doAfterTimeout = ([isTimeOut = true]) => {
+const doAfterTimeout = ([isTimeOut = true]: boolean[]) => {
   if (isTimeOut) {
     // 待たないとrewriteより先にalertが実行されてしまう。
     confirm("時間だよ〜");
   }
-  document.getElementById("start-button").disabled = false;
-  document.getElementById("reset-button").disabled = true;
+  const sButton = document.getElementById("start-button") as HTMLButtonElement;
+  sButton.disabled = false;
+  const rButton = document.getElementById("reset-button") as HTMLButtonElement;
+  rButton.disabled = true;
 };
 
 const doBeforeTimerStart = () => {
-  document.getElementById("start-button").disabled = true;
-  document.getElementById("reset-button").disabled = false;
+  const sButton = document.getElementById("start-button") as HTMLButtonElement;
+  sButton.disabled = true;
+  const rButton = document.getElementById("reset-button") as HTMLButtonElement;
+  rButton.disabled = false;
 };
 
 const timerStart = async () => {
-  const minuteInput = document.getElementById("min");
-  const secondInput = document.getElementById("sec");
+  const minuteInput = document.getElementById("min") as HTMLInputElement;
+  const secondInput = document.getElementById("sec") as HTMLInputElement;
 
   timer = new Timer(
     minuteInput,
@@ -141,6 +165,7 @@ const timerStart = async () => {
 };
 
 const timerReset = () => {
+  if (!timer) return;
   timer.stopTimer(false);
   window.alert("タイマーを止めたよ");
   timer = undefined;
@@ -149,6 +174,8 @@ const timerReset = () => {
 window.onload = () => {
   setNamesInput();
 };
+
+// HTMLからonClickで呼び出すためにwindowオブジェクトのプロパティにする必要がある
 window.addMember = addMember;
 window.resultHandler = resultHandler;
 window.timerStart = timerStart;
