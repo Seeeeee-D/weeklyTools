@@ -8,9 +8,6 @@ let members = [
   "nanaka",
 ];
 
-window.onload = () => {
-  setNamesInput();
-};
 
 const setNamesInput = () => {
   // フォームの要素を取得
@@ -149,3 +146,11 @@ const timerReset = () => {
   window.alert("タイマーを止めたよ");
   timer = undefined;
 };
+
+window.onload = () => {
+  setNamesInput();
+};
+window.addMember = addMember;
+window.resultHandler = resultHandler;
+window.timerStart = timerStart;
+window.timerReset = timerReset;
